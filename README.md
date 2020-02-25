@@ -1,4 +1,5 @@
 # latlng
+[![pub package](https://img.shields.io/pub/v/latlng.svg)](https://pub.dartlang.org/packages/latlng)
 
 A package for geodesy and geographical calculations.
 
