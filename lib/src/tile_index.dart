@@ -2,14 +2,14 @@ import 'lerp.dart' as l;
 
 /// Index of tile on tile-map. On zoom level 0 ranges between [0, 1].
 class TileIndex {
+  /// Default Constructor.
+  const TileIndex(this.x, this.y);
+
   /// Hortizontal Axis.
-  double x;
+  final double x;
 
   /// Vertical Axis.
-  double y;
-
-  /// Default Constructor.
-  TileIndex(this.x, this.y);
+  final double y;
 
   /// Subtracts two [TileIndex]s.
   TileIndex operator -(TileIndex other) {

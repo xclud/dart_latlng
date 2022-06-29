@@ -1,3 +1,7 @@
+## [0.2.0] - 2022-06-29
+
+*  Improvements and code quality.
+
 ## [0.1.1] - 2022-06-29
 
 *  Improvements and code quality.

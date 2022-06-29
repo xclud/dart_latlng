@@ -2,14 +2,14 @@ import 'lerp.dart' as l;
 
 /// Coordinates in Degrees.
 class LatLng {
+  /// Default Constructor.
+  const LatLng(this.latitude, this.longitude);
+
   /// Latitude, Y Axis.
-  double latitude;
+  final double latitude;
 
   /// Longitude, X Axis.
-  double longitude;
-
-  /// Default Constructor.
-  LatLng(this.latitude, this.longitude);
+  final double longitude;
 
   /// Linear interpolation of two [LatLng]s.
   static LatLng lerp(LatLng a, LatLng b, double t) {

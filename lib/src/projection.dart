@@ -67,9 +67,9 @@ extension ProjectionExtensions on Projection {
 /// its unique property of representing any course of constant bearing
 /// as a straight segment.
 class EPSG4326 extends Projection {
-  static const EPSG4326 instance = EPSG4326();
-
   const EPSG4326();
+
+  static const EPSG4326 instance = EPSG4326();
 
   @override
   TileIndex toTileIndex(LatLng location) {
