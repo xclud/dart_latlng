@@ -1,4 +1,4 @@
-import 'lerp.dart' as l;
+part of latlng;
 
 /// Coordinates in Degrees.
 class LatLng {

@@ -1,7 +1,4 @@
-import 'dart:math';
-
-import 'latlng.dart';
-import 'tile_index.dart';
+part of latlng;
 
 abstract class Projection {
   const Projection();
