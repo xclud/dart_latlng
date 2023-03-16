@@ -1,3 +1,7 @@
+## [0.2.1]
+
+* Refactor the package and add [Boundary].
+
 ## [0.2.0] - 2022-06-29
 
 * Improvements and code quality.
