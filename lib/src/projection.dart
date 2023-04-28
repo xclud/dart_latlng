@@ -1,7 +1,9 @@
 part of latlng;
 
 abstract class Projection {
-  const Projection();
+  const Projection({this.precision = 14});
+
+  final int precision;
 
   /// Converts a [LatLng] to its corresponing [TileIndex] screen coordinates.
   TileIndex toTileIndex(LatLng location);
@@ -89,9 +91,16 @@ class EPSG4326 extends Projection {
     final xx = x - 0.5;
     final yy = 0.5 - y;
 
-    final lat = 90.0 - 360.0 * atan(exp(-yy * 2.0 * pi)) / pi;
-    final lng = 360.0 * xx;
+    final lat = _round(90.0 - 360.0 * atan(exp(-yy * 2.0 * pi)) / pi, precision);
+    final lng = _round(360.0 * xx, precision);
 
     return LatLng(lat, lng);
   }
+}
+
+double _round(double value, int precision) {
+  final j = pow(10, precision);
+  value *= j;
+  value = value.toInt() as double;
+  return value / j;
 }
