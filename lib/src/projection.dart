@@ -1,9 +1,7 @@
 part of latlng;
 
 abstract class Projection {
-  const Projection({this.precision = 14});
-
-  final int precision;
+  const Projection();
 
   /// Converts a [LatLng] to its corresponing [TileIndex] screen coordinates.
   TileIndex toTileIndex(LatLng location);
@@ -66,7 +64,9 @@ extension ProjectionExtensions on Projection {
 /// its unique property of representing any course of constant bearing
 /// as a straight segment.
 class EPSG4326 extends Projection {
-  const EPSG4326({super.precision});
+  const EPSG4326({this.precision = 14});
+
+  final int precision;
 
   static const EPSG4326 instance = EPSG4326();
 
