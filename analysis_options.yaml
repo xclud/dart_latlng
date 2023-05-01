@@ -1,12 +1,9 @@
 include: package:lints/recommended.yaml
 analyzer:
   exclude:
-    - 'lib/**/generated/**'
+    - "lib/**/generated/**"
   language:
     strict-raw-types: false
-  strong-mode:
-    implicit-casts: true
-    implicit-dynamic: false
   errors:
     always_declare_return_types: error
     always_specify_types: error
@@ -38,7 +35,7 @@ analyzer:
     prefer_contains: error
     prefer_const_literals_to_create_immutables: error
     prefer_final_fields: error
-    prefer_single_quotes: error 
+    prefer_single_quotes: error
     sized_box_for_whitespace: error
     sort_constructors_first: error
     sort_unnamed_constructors_first: error
