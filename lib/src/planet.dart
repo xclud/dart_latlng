@@ -30,6 +30,61 @@ abstract class Planet {
   /// Flattening of the planet.
   final double flattening;
 
+  /// Gets a polygon on the surface of the planet where a viewer can see.
+  List<LatLng> getGroundTrack(
+    LatLngAlt satellite, {
+    double precesion = 1,
+  }) {
+    final zone = <LatLng>[];
+
+    final latitude = satellite.latitude;
+    final longitude = satellite.longitude;
+    final altitude = satellite.altitude;
+
+    final cosLat = cos(latitude);
+    final sinLat = sin(latitude);
+
+    double num4 = acos(radius / altitude);
+    if (num4.isNaN) {
+      num4 = 0.0;
+    }
+    final cosNum4 = cos(num4);
+    final sinNum4 = sin(num4);
+    int i = 0;
+    do {
+      final angle = pi / 180.0 * i;
+      final lat = asin(sinLat * cosNum4 + cos(angle) * sinNum4 * cosLat);
+      final num9 = (cosNum4 - sinLat * sin(lat)) / (cosLat * cos(lat));
+      final lng = (((i != 0 || !(num4 > pi / 2.0 - latitude)) && 0 == 0)
+          ? (((i == 180 && num4 > pi / 2.0 + latitude))
+              ? (longitude + pi)
+              : ((num9.abs() > 1.0)
+                  ? longitude
+                  : ((i > 180)
+                      ? (longitude - acos(num9))
+                      : (longitude + acos(num9)))))
+          : (longitude + pi));
+
+      final z = LatLng(
+        lat * _rad2deg,
+        lng * _rad2deg,
+      );
+
+      zone.add(z);
+
+      i++;
+    } while (i <= 359);
+
+    zone.add(
+      LatLng(
+        zone[0].latitude,
+        zone[0].longitude,
+      ),
+    );
+
+    return zone;
+  }
+
   /// Calculates Topocentrics.
   Topocentric topocentric(
       LatLngAlt observer, EarthCenteredEarthFixed satellite) {

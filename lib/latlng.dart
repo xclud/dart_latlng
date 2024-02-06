@@ -2,6 +2,7 @@
 library latlng;
 
 import 'dart:convert';
+import 'dart:core';
 import 'dart:math';
 
 import 'src/lerp.dart' as l;
@@ -16,6 +17,7 @@ part 'src/eci.dart';
 part 'src/topocentric.dart';
 part 'src/look_angle.dart';
 part 'src/julian.dart';
+part 'src/const.dart';
 
 part 'src/geojson/feature.dart';
 part 'src/geojson/feature_collection.dart';

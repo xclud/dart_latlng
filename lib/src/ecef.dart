@@ -13,4 +13,20 @@ class EarthCenteredEarthFixed {
 
   /// Z Coordinate.
   final double z;
+
+  EarthCenteredEarthFixed operator +(EarthCenteredEarthFixed other) {
+    final dx = x + other.x;
+    final dy = x + other.y;
+    final dz = x + other.z;
+
+    return EarthCenteredEarthFixed(dx, dy, dz);
+  }
+
+  EarthCenteredEarthFixed operator -(EarthCenteredEarthFixed other) {
+    final dx = x - other.x;
+    final dy = x - other.y;
+    final dz = x - other.z;
+
+    return EarthCenteredEarthFixed(dx, dy, dz);
+  }
 }

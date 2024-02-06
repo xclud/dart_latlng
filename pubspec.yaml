@@ -1,6 +1,6 @@
 name: latlng
 description: GeoJSON, Geodesy and Geographical calculations for Dart. Provides LatLong and Mercator projection (EPSG4326).
-version: 1.0.2
+version: 1.0.3
 repository: https://github.com/xclud/dart_latlng
 homepage: https://pwa.ir
 
