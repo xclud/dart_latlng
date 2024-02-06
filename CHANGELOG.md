@@ -1,3 +1,7 @@
+## [1.0.4]
+
+* Introduce Angle class.
+
 ## [1.0.3]
 
 * Fix julian calculations.

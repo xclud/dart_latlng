@@ -17,6 +17,7 @@ part 'src/eci.dart';
 part 'src/topocentric.dart';
 part 'src/look_angle.dart';
 part 'src/julian.dart';
+part 'src/angle.dart';
 part 'src/const.dart';
 
 part 'src/geojson/feature.dart';

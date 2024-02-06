@@ -1,6 +1,7 @@
 part of '../latlng.dart';
 
 const double _rad2deg = 180.0 / pi;
+const double _deg2rad = pi / 180.0;
 
 const double _twopi = 2.0 * pi;
 

@@ -26,39 +26,39 @@ class LatLngAlt {
   const LatLngAlt(this.latitude, this.longitude, this.altitude);
 
   /// Latitude, Y Axis.
-  final double latitude;
+  final Angle latitude;
 
   /// Longitude, X Axis.
-  final double longitude;
+  final Angle longitude;
 
   /// Altitude.
   final double altitude;
 
   LatLng toLatLng() {
-    return LatLng(latitude, longitude);
+    return LatLng(latitude.degrees, longitude.degrees);
   }
 
   /// Linear interpolation of two [LatLng]s.
   static LatLngAlt lerp(LatLngAlt a, LatLngAlt b, double t) {
-    final lat = l.lerp(a.latitude, b.latitude, t);
-    final lng = l.lerp(a.longitude, b.longitude, t);
+    final lat = l.lerp(a.latitude.degrees, b.latitude.degrees, t);
+    final lng = l.lerp(a.longitude.degrees, b.longitude.degrees, t);
     final alt = l.lerp(a.altitude, b.altitude, t);
 
-    return LatLngAlt(lat, lng, alt);
+    return LatLngAlt(Angle.degree(lat), Angle.degree(lng), alt);
   }
 
   EarthCenteredEarthFixed toEcf(Planet planet) {
     final geodetic = this;
-    double longitude = geodetic.longitude;
-    double latitude = geodetic.latitude;
-    double altitude = geodetic.altitude;
-    double radius = planet.radius;
-    double flattening = planet.flattening;
-    double num = 2.0 * flattening - flattening * flattening;
-    double num2 = radius / sqrt(1.0 - num * (sin(latitude) * sin(latitude)));
-    double x = (num2 + altitude) * cos(latitude) * cos(longitude);
-    double y = (num2 + altitude) * cos(latitude) * sin(longitude);
-    double z = (num2 * (1.0 - num) + altitude) * sin(latitude);
+    final longitude = geodetic.longitude.radians;
+    final latitude = geodetic.latitude.radians;
+    final altitude = geodetic.altitude;
+    final radius = planet.radius;
+    final flattening = planet.flattening;
+    final num = 2.0 * flattening - flattening * flattening;
+    final num2 = radius / sqrt(1.0 - num * (sin(latitude) * sin(latitude)));
+    final x = (num2 + altitude) * cos(latitude) * cos(longitude);
+    final y = (num2 + altitude) * cos(latitude) * sin(longitude);
+    final z = (num2 * (1.0 - num) + altitude) * sin(latitude);
 
     return EarthCenteredEarthFixed(x, y, z);
   }

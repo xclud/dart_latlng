@@ -10,10 +10,10 @@ class LookAngle {
   });
 
   /// Azimuth.
-  final double azimuth;
+  final Angle azimuth;
 
   /// Elevation.
-  final double elevation;
+  final Angle elevation;
 
   /// Distance.
   final double range;

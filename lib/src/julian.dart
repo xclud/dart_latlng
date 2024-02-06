@@ -176,28 +176,43 @@ class Julian {
 
   /// Returns a UTC DateTime object that corresponds to this Julian date.
   DateTime toDateTime() {
-    double d2 = value + 0.5;
-    int Z = d2.floor();
-    int alpha = ((Z - 1867216.25) / 36524.25).floor();
-    int A = Z + 1 + alpha - (alpha ~/ 4);
-    int B = A + 1524;
-    int C = ((B - 122.1) / 365.25).floor();
-    int D = (365.25 * C).floor();
-    int E = ((B - D) / 30.6001).floor();
+    final d2 = value + 0.5;
+    final Z = d2.floor();
+    final alpha = ((Z - 1867216.25) / 36524.25).floor();
+    final A = Z + 1 + alpha - (alpha ~/ 4);
+    final B = A + 1524;
+    final C = ((B - 122.1) / 365.25).floor();
+    final D = (365.25 * C).floor();
+    final E = ((B - D) / 30.6001).floor();
 
     // For reference: the fractional day of the month can be
     // calculated as follows:
     //
     // double day = B - D - (int)(30.6001 * E) + F;
 
-    int month = (E <= 13) ? (E - 1) : (E - 13);
-    int year = (month >= 3) ? (C - 4716) : (C - 4715);
+    final month = (E <= 13) ? (E - 1) : (E - 13);
+    final year = (month >= 3) ? (C - 4716) : (C - 4715);
 
-    //final jdJan01 = Julian.fromYearAndDoy(year, 1.0);
-    //double doy = Value - jdJan01.Value; // zero-relative
+    final jdJan01 = Julian.fromYearAndDoy(year, 1.0);
+    final doy = value - jdJan01.value; // zero-relative
+    final r = doy - doy.floor();
+    final h = r / 24.0;
+    final m = h / 60.0;
+    final s = m / 60.0;
+    final ms = s / 1000.0;
+    final ks = ms / 1000.0;
 
     final dtJan01 = DateTime(year, 1, 1, 0, 0, 0);
 
-    return dtJan01; //.add(Duration(days:  doy));
+    return dtJan01.add(
+      Duration(
+        days: doy.floor(),
+        hours: h.floor(),
+        minutes: m.floor(),
+        seconds: s.floor(),
+        milliseconds: ms.floor(),
+        microseconds: ks.floor(),
+      ),
+    );
   }
 }

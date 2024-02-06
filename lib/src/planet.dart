@@ -37,8 +37,8 @@ abstract class Planet {
   }) {
     final zone = <LatLng>[];
 
-    final latitude = satellite.latitude;
-    final longitude = satellite.longitude;
+    final latitude = satellite.latitude.radians;
+    final longitude = satellite.longitude.radians;
     final altitude = satellite.altitude;
 
     final cosLat = cos(latitude);
@@ -88,8 +88,8 @@ abstract class Planet {
   /// Calculates Topocentrics.
   Topocentric topocentric(
       LatLngAlt observer, EarthCenteredEarthFixed satellite) {
-    double longitude = observer.longitude;
-    double latitude = observer.latitude;
+    final longitude = observer.longitude.radians;
+    final latitude = observer.latitude.radians;
     final earthCenteredEarthFixed = observer.toEcf(this);
     final dx = satellite.x - earthCenteredEarthFixed.x;
     final dy = satellite.y - earthCenteredEarthFixed.y;
