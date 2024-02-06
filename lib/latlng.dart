@@ -14,6 +14,7 @@ part 'src/planet.dart';
 part 'src/ecef.dart';
 part 'src/eci.dart';
 part 'src/topocentric.dart';
+part 'src/look_angle.dart';
 part 'src/julian.dart';
 
 part 'src/geojson/feature.dart';
