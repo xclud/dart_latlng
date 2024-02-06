@@ -43,7 +43,7 @@ class Julian {
                     60.0)) /
             24.0);
 
-    return Julian._(v);
+    return Julian._fromYearAndDoy(utc.year, v);
   }
 
   /// Initialize the Julian date object.
@@ -64,7 +64,7 @@ class Julian {
   ///    day = 1.0  Jan 1 00h
   ///    day = 1.5  Jan 1 12h
   ///    day = 2.0  Jan 2 00h
-  factory Julian.fromYearAndDoy(int year, double doy) {
+  factory Julian._fromYearAndDoy(int year, double doy) {
     // Arbitrary years used for error checking
     if (year < 1900 || year > 2100) {
       throw Exception('Year (1900, 2100)');
@@ -193,7 +193,7 @@ class Julian {
     final month = (E <= 13) ? (E - 1) : (E - 13);
     final year = (month >= 3) ? (C - 4716) : (C - 4715);
 
-    final jdJan01 = Julian.fromYearAndDoy(year, 1.0);
+    final jdJan01 = Julian._fromYearAndDoy(year, 1.0);
     final doy = value - jdJan01.value; // zero-relative
     final r = doy - doy.floor();
     final h = r / 24.0;

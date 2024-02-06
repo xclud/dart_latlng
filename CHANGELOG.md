@@ -1,4 +1,4 @@
-## [1.0.4]
+## [2.0.0]
 
 * Introduce Angle class.
 

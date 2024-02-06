@@ -17,4 +17,9 @@ class LookAngle {
 
   /// Distance.
   final double range;
+
+  @override
+  String toString() {
+    return 'Azimuth: ${azimuth.degrees}°, Elevation: ${elevation.degrees}°, Range: ${range}';
+  }
 }
