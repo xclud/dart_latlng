@@ -1,4 +1,4 @@
-part of latlng;
+part of '../latlng.dart';
 
 /// Index of tile on tile-map. On zoom level 0 ranges between [0, 1].
 class TileIndex {

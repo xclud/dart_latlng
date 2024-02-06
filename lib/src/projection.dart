@@ -1,4 +1,4 @@
-part of latlng;
+part of '../latlng.dart';
 
 abstract class Projection {
   const Projection();

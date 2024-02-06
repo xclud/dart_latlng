@@ -1,4 +1,4 @@
-part of latlng;
+part of '../latlng.dart';
 
 class Boundary {
   const Boundary({

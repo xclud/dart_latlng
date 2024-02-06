@@ -1,4 +1,4 @@
-part of latlng;
+part of '../latlng.dart';
 
 /// Coordinates in Degrees.
 class LatLng {
@@ -45,5 +45,21 @@ class LatLngAlt {
     final alt = l.lerp(a.altitude, b.altitude, t);
 
     return LatLngAlt(lat, lng, alt);
+  }
+
+  EarthCenteredEarthFixed toEcf(Planet planet) {
+    final geodetic = this;
+    double longitude = geodetic.longitude;
+    double latitude = geodetic.latitude;
+    double altitude = geodetic.altitude;
+    double radius = planet.radius;
+    double flattening = planet.flattening;
+    double num = 2.0 * flattening - flattening * flattening;
+    double num2 = radius / sqrt(1.0 - num * (sin(latitude) * sin(latitude)));
+    double x = (num2 + altitude) * cos(latitude) * cos(longitude);
+    double y = (num2 + altitude) * cos(latitude) * sin(longitude);
+    double z = (num2 * (1.0 - num) + altitude) * sin(latitude);
+
+    return EarthCenteredEarthFixed(x, y, z);
   }
 }

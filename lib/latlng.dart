@@ -10,6 +10,11 @@ part 'src/boundary.dart';
 part 'src/latlng.dart';
 part 'src/projection.dart';
 part 'src/tile_index.dart';
+part 'src/planet.dart';
+part 'src/ecef.dart';
+part 'src/eci.dart';
+part 'src/topocentric.dart';
+part 'src/julian.dart';
 
 part 'src/geojson/feature.dart';
 part 'src/geojson/feature_collection.dart';

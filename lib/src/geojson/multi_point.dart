@@ -1,4 +1,4 @@
-part of latlng;
+part of '../../latlng.dart';
 
 /// Represents a multi-point geometry.
 class MultiPoint implements Geometry {

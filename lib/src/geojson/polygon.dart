@@ -1,4 +1,4 @@
-part of latlng;
+part of '../../latlng.dart';
 
 /// Polygon Geometry.
 class Polygon implements Geometry {

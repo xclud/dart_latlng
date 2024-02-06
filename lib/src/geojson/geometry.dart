@@ -1,4 +1,4 @@
-part of latlng;
+part of '../../latlng.dart';
 
 List<double> _toList(LatLng coordinates) {
   return [coordinates.latitude, coordinates.longitude];

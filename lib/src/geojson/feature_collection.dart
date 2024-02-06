@@ -1,4 +1,4 @@
-part of latlng;
+part of '../../latlng.dart';
 
 /// A GeoJSON object with the type "FeatureCollection" is a [FeatureCollection] object.
 class FeatureCollection {

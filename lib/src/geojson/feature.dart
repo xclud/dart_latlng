@@ -1,4 +1,4 @@
-part of latlng;
+part of '../../latlng.dart';
 
 /// Features are described in section 4.2 of the specification.
 class Feature {
