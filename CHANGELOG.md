@@ -1,7 +1,10 @@
+## [1.0.2]
+
+* Topocentric, ECF and ECI calculations.
+
 ## [1.0.1]
 
 * LatLngAlt class added.
-
 ## [1.0.0]
 
 * Initial release.
