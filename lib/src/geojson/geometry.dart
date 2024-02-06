@@ -1,7 +1,7 @@
 part of '../../latlng.dart';
 
 List<double> _toList(LatLng coordinates) {
-  return [coordinates.latitude, coordinates.longitude];
+  return [coordinates.latitude.degrees, coordinates.longitude.degrees];
 }
 
 List<List<double>> _toListList(List<LatLng> coordinates) {
@@ -19,7 +19,10 @@ List<List<List<List<double>>>> _toListListListList(
 
 LatLng _toLatLng(dynamic coordinates) {
   final coords = List<num>.from(coordinates, growable: false);
-  return LatLng(coords[0].toDouble(), coords[1].toDouble());
+  return LatLng(
+    Angle.degree(coords[0].toDouble()),
+    Angle.degree(coords[1].toDouble()),
+  );
 }
 
 List<LatLng> _toLatLngList(dynamic coordinates) {

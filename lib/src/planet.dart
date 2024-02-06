@@ -66,8 +66,8 @@ abstract class Planet {
           : (longitude + pi));
 
       final z = LatLng(
-        lat * _rad2deg,
-        lng * _rad2deg,
+        Angle.radian(lat),
+        Angle.radian(lng),
       );
 
       zone.add(z);

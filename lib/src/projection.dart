@@ -70,8 +70,8 @@ class EPSG4326 extends Projection {
 
   @override
   TileIndex toTileIndex(LatLng location) {
-    final lng = location.longitude;
-    final lat = location.latitude;
+    final lng = location.longitude.degrees;
+    final lat = location.latitude.degrees;
 
     double x = (lng + 180.0) / 360.0;
     double sinLatitude = sin(lat * pi / 180.0);
@@ -92,6 +92,6 @@ class EPSG4326 extends Projection {
     final lat = 90.0 - 360.0 * atan(exp(-yy * 2.0 * pi)) / pi;
     final lng = 360.0 * xx;
 
-    return LatLng(lat, lng);
+    return LatLng(Angle.degree(lat), Angle.degree(lng));
   }
 }

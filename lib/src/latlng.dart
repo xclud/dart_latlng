@@ -6,17 +6,17 @@ class LatLng {
   const LatLng(this.latitude, this.longitude);
 
   /// Latitude, Y Axis.
-  final double latitude;
+  final Angle latitude;
 
   /// Longitude, X Axis.
-  final double longitude;
+  final Angle longitude;
 
   /// Linear interpolation of two [LatLng]s.
   static LatLng lerp(LatLng a, LatLng b, double t) {
-    final lat = l.lerp(a.latitude, b.latitude, t);
-    final lng = l.lerp(a.longitude, b.longitude, t);
+    final lat = l.lerp(a.latitude.degrees, b.latitude.degrees, t);
+    final lng = l.lerp(a.longitude.degrees, b.longitude.degrees, t);
 
-    return LatLng(lat, lng);
+    return LatLng(Angle.degree(lat), Angle.degree(lng));
   }
 }
 
@@ -35,7 +35,7 @@ class LatLngAlt {
   final double altitude;
 
   LatLng toLatLng() {
-    return LatLng(latitude.degrees, longitude.degrees);
+    return LatLng(latitude, longitude);
   }
 
   /// Linear interpolation of two [LatLng]s.
