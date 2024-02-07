@@ -20,6 +20,6 @@ class LookAngle {
 
   @override
   String toString() {
-    return 'Azimuth: ${azimuth.degrees}°, Elevation: ${elevation.degrees}°, Range: ${range}';
+    return 'Azimuth: ${azimuth.degrees}°, Elevation: ${elevation.degrees}°, Range: $range';
   }
 }

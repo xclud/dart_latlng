@@ -1,5 +1,9 @@
 ## [2.0.0]
 
+* ECI to Geodetic conversion.
+
+## [2.0.0]
+
 * Introduce Angle class.
 
 ## [1.0.3]
