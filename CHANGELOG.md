@@ -1,3 +1,7 @@
+## [2.0.2]
+
+* Adds ground track (Footprint) calculations.
+
 ## [2.0.1]
 
 * ECI to Geodetic conversion.

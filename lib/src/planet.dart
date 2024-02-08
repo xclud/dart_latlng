@@ -30,7 +30,9 @@ abstract class Planet {
   /// Flattening of the planet.
   final double flattening;
 
-  /// Gets a polygon on the surface of the planet where a viewer can see.
+  /// Gets a polygon on the surface of the planet where a [satellite] or flying object can see.
+  ///
+  /// [satellite] Altitude must be in Kilometers and positive (altitude > 0).
   List<LatLng> getGroundTrack(
     LatLngAlt satellite, {
     double precesion = 1,
@@ -39,24 +41,30 @@ abstract class Planet {
 
     final latitude = satellite.latitude.radians;
     final longitude = satellite.longitude.radians;
-    final altitude = satellite.altitude;
+    final temp = satellite.altitude;
+
+    if (temp <= 0) {
+      throw Exception('Altitude must be higher then 0 ($temp).');
+    }
+
+    final altitude = radius + temp;
 
     final cosLat = cos(latitude);
     final sinLat = sin(latitude);
 
-    double num4 = acos(radius / altitude);
-    if (num4.isNaN) {
-      num4 = 0.0;
+    double asocAlt = acos(radius / altitude);
+    if (asocAlt.isNaN) {
+      asocAlt = 0.0;
     }
-    final cosNum4 = cos(num4);
-    final sinNum4 = sin(num4);
+    final cosAlt = cos(asocAlt);
+    final sinAlt = sin(asocAlt);
     int i = 0;
     do {
       final angle = pi / 180.0 * i;
-      final lat = asin(sinLat * cosNum4 + cos(angle) * sinNum4 * cosLat);
-      final num9 = (cosNum4 - sinLat * sin(lat)) / (cosLat * cos(lat));
-      final lng = (((i != 0 || !(num4 > pi / 2.0 - latitude)) && 0 == 0)
-          ? (((i == 180 && num4 > pi / 2.0 + latitude))
+      final lat = asin(sinLat * cosAlt + cos(angle) * sinAlt * cosLat);
+      final num9 = (cosAlt - sinLat * sin(lat)) / (cosLat * cos(lat));
+      final lng = (((i != 0 || !(asocAlt > pi / 2.0 - latitude)) && 0 == 0)
+          ? (((i == 180 && asocAlt > pi / 2.0 + latitude))
               ? (longitude + pi)
               : ((num9.abs() > 1.0)
                   ? longitude
