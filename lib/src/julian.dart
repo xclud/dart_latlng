@@ -144,9 +144,9 @@ class Julian {
   Angle get gmst {
     /* Calculate Greenwich Mean Sidereal Time according to 
 		 http://aa.usno.navy.mil/faq/docs/GAST.php */
-    final d = value - 2451545.0;
+    final d = fromJan1_12h_2000();
     // Low precision equation is good enough for our purposes.
-    final rad = (18.697374558 + 24.06570982441908 * d) % 24;
+    final rad = (18.697374558 + 24.06570982441908 * d) % 24.0;
 
     return Angle.degree(rad);
   }
