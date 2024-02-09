@@ -20,8 +20,8 @@ extension DateTimeExtensions on DateTime {
   Julian get julian => Julian.fromDateTime(this);
 
   /// Calculate Greenwich Mean Sidereal Time according to http://aa.usno.navy.mil/faq/docs/GAST.php
-  double get gsmt {
-    final result = julian.toGmst();
+  Angle get gsmt {
+    final result = julian.gmst;
 
     return result;
   }
@@ -141,26 +141,14 @@ class Julian {
   /// Returns the angle, in radians, measuring eastward from the Vernal Equinox to
   /// the prime meridian. This angle is also referred to as "ThetaG"
   /// (Theta GMST).
-  double toGmst() {
-    // References:
-    //    The 1992 Astronomical Almanac, page B6.
-    //    Explanatory Supplement to the Astronomical Almanac, page 50.
-    //    Orbital Coordinate Systems, Part III, Dr. T.S. Kelso,
-    //       Satellite Times, Nov/Dec 1995
+  Angle get gmst {
+    /* Calculate Greenwich Mean Sidereal Time according to 
+		 http://aa.usno.navy.mil/faq/docs/GAST.php */
+    final d = value - 2451545.0;
+    // Low precision equation is good enough for our purposes.
+    final rad = (18.697374558 + 24.06570982441908 * d) % 24;
 
-    final ut = (value + 0.5) % 1.0;
-    final tu = (fromJan1_12h_2000() - ut) / 36525.0;
-
-    double gmst = 24110.54841 +
-        (tu * (8640184.812866 + (tu * (0.093104 - (tu * 6.2e-06)))));
-
-    gmst = (gmst + (_secondsPerDay * _omegaE * ut)) % _secondsPerDay;
-
-    if (gmst < 0.0) {
-      gmst += _secondsPerDay; // "wrap" negative modulo value
-    }
-
-    return _twopi * (gmst / _secondsPerDay);
+    return Angle.degree(rad);
   }
 
   /// Calculate Local Mean Sidereal Time for this Julian date at the given
@@ -170,8 +158,10 @@ class Julian {
   ///
   /// The angle, in radians, measuring eastward from the Vernal Equinox to
   /// the given longitude.
-  double toLmst(double longitude) {
-    return (toGmst() + longitude) % _twopi;
+  Angle lmst(Angle longitude) {
+    final rad = (gmst.radians + longitude.radians) % _twopi;
+
+    return Angle.radian(rad);
   }
 
   /// Returns a UTC DateTime object that corresponds to this Julian date.

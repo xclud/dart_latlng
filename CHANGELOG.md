@@ -1,3 +1,7 @@
+## [2.0.3]
+
+* Fix GMST calculations.
+
 ## [2.0.2]
 
 * Adds ground track (Footprint) calculations.

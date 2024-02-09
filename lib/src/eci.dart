@@ -16,9 +16,9 @@ class EarthCenteredInertial {
   final double z;
 
   /// Converts this ECI object to ECF.
-  EarthCenteredEarthFixed toEcf(double gmst) {
-    double x = this.x * cos(gmst) + this.y * sin(gmst);
-    double y = this.x * (-sin(gmst)) + this.y * cos(gmst);
+  EarthCenteredEarthFixed toEcf(Angle gmst) {
+    final x = this.x * cos(gmst.radians) + this.y * sin(gmst.radians);
+    final y = this.x * (-sin(gmst.radians)) + this.y * cos(gmst.radians);
 
     return EarthCenteredEarthFixed(x, y, z);
   }
@@ -28,7 +28,7 @@ class EarthCenteredInertial {
     return toEcf(utc.toUtc().gsmt);
   }
 
-  LatLngAlt toGeodetic(Planet planet, double gmst) {
+  LatLngAlt toGeodetic(Planet planet, Angle gmst) {
     // http://www.celestrak.com/columns/v02n03/
     final a = planet.radius;
     final f = planet.flattening;
@@ -36,7 +36,7 @@ class EarthCenteredInertial {
 
     final R = sqrt((x * x) + (y * y));
 
-    var longitude = atan2(y, x) - gmst;
+    var longitude = atan2(y, x) - gmst.radians;
     while (longitude < -pi) {
       longitude += pi * 2;
     }
@@ -64,7 +64,7 @@ class EarthCenteredInertial {
   }
 
   LatLngAlt toGeodeticByDateTime(Planet planet, DateTime utc) {
-    final gmst = Julian.fromDateTime(utc).toGmst();
+    final gmst = Julian.fromDateTime(utc).gmst;
     return toGeodetic(planet, gmst);
   }
 }
