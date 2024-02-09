@@ -1,12 +1,5 @@
 part of '../latlng.dart';
 
-double _dayOfYear(DateTime someDate) {
-  final diff = someDate.difference(DateTime(someDate.year, 1, 1, 0, 0));
-  final diffInDays = diff.inMilliseconds / 86400000.0;
-
-  return diffInDays;
-}
-
 /// A set of extensions on [DateTime] object.
 extension DateTimeExtensions on DateTime {
   double get dayOfYear {
@@ -36,14 +29,27 @@ class Julian {
   ///
   /// [utc] The UTC time to convert.
   factory Julian.fromDateTime(DateTime utc) {
-    final v = _dayOfYear(utc) +
-        ((utc.hour +
-                ((utc.minute +
-                        ((utc.second + (utc.millisecond / 1000.0)) / 60.0)) /
-                    60.0)) /
-            24.0);
+    double floor(double v) => v.floorToDouble();
 
-    return Julian._fromYearAndDoy(utc.year, v);
+    final year = utc.year;
+    final mon = utc.month;
+    final day = utc.day;
+    final hr = utc.hour;
+    final minute = utc.minute;
+    final sec = utc.second;
+    final msec = utc.millisecond;
+
+    final j = 367.0 * year -
+            floor(7 * (year + floor((mon + 9) / 12.0)) * 0.25) +
+            floor(275 * mon / 9.0) +
+            day +
+            1721013.5 +
+            ((msec / 60000 + sec / 60.0 + minute) / 60.0 + hr) /
+                24.0 // ut in days
+        // # - 0.5*sgn(100.0*year + mon - 190002.5) + 0.5;
+        ;
+
+    return Julian._(j);
   }
 
   /// Initialize the Julian date object.
@@ -52,50 +58,6 @@ class Julian {
   /// represented by the day value of 1.5, etc.
 
   const Julian._(this.value);
-
-  /// Create a Julian date object given a year and day-of-year.
-  ///
-  /// [year] The year, including the century (i.e., 2012).
-  /// [doy] Day of year (1 means January 1, etc.).
-
-  /// The fractional part of the day value is the fractional portion of
-  /// the day.
-  /// Examples:
-  ///    day = 1.0  Jan 1 00h
-  ///    day = 1.5  Jan 1 12h
-  ///    day = 2.0  Jan 2 00h
-  factory Julian._fromYearAndDoy(int year, double doy) {
-    // Arbitrary years used for error checking
-    if (year < 1900 || year > 2100) {
-      throw Exception('Year (1900, 2100)');
-    }
-
-    // The last day of a leap year is day 366
-    if (doy < 1.0 || doy >= 367.0) {
-      throw Exception('Day (1, 367)');
-    }
-
-    // Now calculate Julian date
-    // Ref: "Astronomical Formulae for Calculators", Jean Meeus, pages 23-25
-
-    year--;
-
-    // Centuries are not leap years unless they divide by 400
-    int A = year ~/ 100;
-    int B = 2 - A + (A ~/ 4);
-
-    final jan01 =
-        (365.25 * year).floor() + (30.6001 * 14).floor() + 1720994.5 + B;
-
-    return Julian._(jan01 + doy);
-  }
-
-  /// Calculates the time difference between two Julian dates.
-  ///
-  /// Returns a [Duration] representing the time difference between the two dates.
-  Duration diffrence(Julian other) {
-    return toDateTime().difference(other.toDateTime());
-  }
 
   /// The Julian date.
   final double value;
@@ -142,13 +104,21 @@ class Julian {
   /// the prime meridian. This angle is also referred to as "ThetaG"
   /// (Theta GMST).
   Angle get gmst {
-    /* Calculate Greenwich Mean Sidereal Time according to 
-		 http://aa.usno.navy.mil/faq/docs/GAST.php */
-    final d = fromJan1_12h_2000();
-    // Low precision equation is good enough for our purposes.
-    final rad = (18.697374558 + 24.06570982441908 * d) % 24.0;
+    final jdut1 = value;
 
-    return Angle.degree(rad);
+    var tut1 = (jdut1 - 2451545.0) / 36525.0;
+    var temp = -6.2e-6 * tut1 * tut1 * tut1 +
+        0.093104 * tut1 * tut1 +
+        (876600.0 * 3600 + 8640184.812866) * tut1 +
+        67310.54841; // # sec
+    temp =
+        temp * _deg2rad / 240.0 % _twopi; // 360/86400 = 1/240, to deg, to rad
+
+    //  ------------------------ check quadrants ---------------------
+    if (temp < 0.0) {
+      temp += _twopi;
+    }
+    return Angle.radian(temp);
   }
 
   /// Calculate Local Mean Sidereal Time for this Julian date at the given
@@ -162,47 +132,5 @@ class Julian {
     final rad = (gmst.radians + longitude.radians) % _twopi;
 
     return Angle.radian(rad);
-  }
-
-  /// Returns a UTC DateTime object that corresponds to this Julian date.
-  DateTime toDateTime() {
-    final d2 = value + 0.5;
-    final Z = d2.floor();
-    final alpha = ((Z - 1867216.25) / 36524.25).floor();
-    final A = Z + 1 + alpha - (alpha ~/ 4);
-    final B = A + 1524;
-    final C = ((B - 122.1) / 365.25).floor();
-    final D = (365.25 * C).floor();
-    final E = ((B - D) / 30.6001).floor();
-
-    // For reference: the fractional day of the month can be
-    // calculated as follows:
-    //
-    // double day = B - D - (int)(30.6001 * E) + F;
-
-    final month = (E <= 13) ? (E - 1) : (E - 13);
-    final year = (month >= 3) ? (C - 4716) : (C - 4715);
-
-    final jdJan01 = Julian._fromYearAndDoy(year, 1.0);
-    final doy = value - jdJan01.value; // zero-relative
-    final r = doy - doy.floor();
-    final h = r / 24.0;
-    final m = h / 60.0;
-    final s = m / 60.0;
-    final ms = s / 1000.0;
-    final ks = ms / 1000.0;
-
-    final dtJan01 = DateTime(year, 1, 1, 0, 0, 0);
-
-    return dtJan01.add(
-      Duration(
-        days: doy.floor(),
-        hours: h.floor(),
-        minutes: m.floor(),
-        seconds: s.floor(),
-        milliseconds: ms.floor(),
-        microseconds: ks.floor(),
-      ),
-    );
   }
 }

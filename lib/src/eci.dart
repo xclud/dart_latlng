@@ -17,8 +17,11 @@ class EarthCenteredInertial {
 
   /// Converts this ECI object to ECF.
   EarthCenteredEarthFixed toEcf(Angle gmst) {
-    final x = this.x * cos(gmst.radians) + this.y * sin(gmst.radians);
-    final y = this.x * (-sin(gmst.radians)) + this.y * cos(gmst.radians);
+    final s = sin(gmst.radians);
+    final c = cos(gmst.radians);
+
+    final x = this.x * c + this.y * s;
+    final y = this.x * (-s) + this.y * c;
 
     return EarthCenteredEarthFixed(x, y, z);
   }

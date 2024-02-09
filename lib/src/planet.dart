@@ -95,7 +95,9 @@ abstract class Planet {
 
   /// Calculates Topocentrics.
   Topocentric topocentric(
-      LatLngAlt observer, EarthCenteredEarthFixed satellite) {
+    LatLngAlt observer,
+    EarthCenteredEarthFixed satellite,
+  ) {
     final longitude = observer.longitude.radians;
     final latitude = observer.latitude.radians;
     final earthCenteredEarthFixed = observer.toEcf(this);
@@ -103,11 +105,11 @@ abstract class Planet {
     final dy = satellite.y - earthCenteredEarthFixed.y;
     final dz = satellite.z - earthCenteredEarthFixed.z;
 
-    double south = sin(latitude) * cos(longitude) * dx +
+    final south = sin(latitude) * cos(longitude) * dx +
         sin(latitude) * sin(longitude) * dy -
         cos(latitude) * dz;
-    double east = (0.0 - sin(longitude)) * dx + cos(longitude) * dy;
-    double normal = cos(latitude) * cos(longitude) * dx +
+    final east = (0.0 - sin(longitude)) * dx + cos(longitude) * dy;
+    final normal = cos(latitude) * cos(longitude) * dx +
         cos(latitude) * sin(longitude) * dy +
         sin(latitude) * dz;
 
@@ -155,5 +157,5 @@ const wgs84 = Earth._(
   j2: 0.00108262998905,
   j3: -0.00000253215306,
   j4: -0.00000161098761,
-  flattening: 1 / 298.257223563,
+  flattening: 0.0033528106718309306,
 );

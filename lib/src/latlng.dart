@@ -5,6 +5,11 @@ class LatLng {
   /// Default Constructor.
   const LatLng(this.latitude, this.longitude);
 
+  /// Create an instance from degrees.
+  LatLng.degree(double latitude, double longitude)
+      : latitude = Angle.degree(latitude),
+        longitude = Angle.degree(longitude);
+
   /// Latitude, Y Axis.
   final Angle latitude;
 
@@ -51,14 +56,16 @@ class LatLngAlt {
     final geodetic = this;
     final longitude = geodetic.longitude.radians;
     final latitude = geodetic.latitude.radians;
-    final altitude = geodetic.altitude;
+    final height = geodetic.altitude;
     final radius = planet.radius;
-    final flattening = planet.flattening;
-    final num = 2.0 * flattening - flattening * flattening;
-    final num2 = radius / sqrt(1.0 - num * (sin(latitude) * sin(latitude)));
-    final x = (num2 + altitude) * cos(latitude) * cos(longitude);
-    final y = (num2 + altitude) * cos(latitude) * sin(longitude);
-    final z = (num2 * (1.0 - num) + altitude) * sin(latitude);
+    final f = planet.flattening;
+
+    final e2 = 2 * f - f * f;
+    final normal = radius / sqrt(1 - e2 * (sin(latitude) * sin(latitude)));
+
+    final x = (normal + height) * cos(latitude) * cos(longitude);
+    final y = (normal + height) * cos(latitude) * sin(longitude);
+    final z = (normal * (1 - e2) + height) * sin(latitude);
 
     return EarthCenteredEarthFixed(x, y, z);
   }

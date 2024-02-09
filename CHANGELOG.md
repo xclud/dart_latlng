@@ -1,6 +1,6 @@
-## [2.0.3]
+## [2.0.4]
 
-* Fix GMST calculations.
+* Fix GMST, ECF and Topcentric calculations.
 
 ## [2.0.2]
 
