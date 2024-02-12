@@ -22,6 +22,12 @@ extension DateTimeExtensions on DateTime {
 
 /// Encapsulates a Julian date.
 class Julian {
+  /// Initialize the Julian date object.
+  ///
+  /// The first day of the year, Jan 1, is day 1.0. Noon on Jan 1 is
+  /// represented by the day value of 1.5, etc.
+
+  const Julian(this.value);
   // Jan  1.5 2000 = Jan  1 2000 12h UTC
 
   /// Create a Julian date object from a DateTime object. The time
@@ -49,15 +55,8 @@ class Julian {
         // # - 0.5*sgn(100.0*year + mon - 190002.5) + 0.5;
         ;
 
-    return Julian._(j);
+    return Julian(j);
   }
-
-  /// Initialize the Julian date object.
-  ///
-  /// The first day of the year, Jan 1, is day 1.0. Noon on Jan 1 is
-  /// represented by the day value of 1.5, etc.
-
-  const Julian._(this.value);
 
   /// The Julian date.
   final double value;
@@ -87,16 +86,16 @@ class Julian {
   static const _j1H12Y2000 = 2451545.0;
 
   /// Adds days.
-  Julian addDays(double day) => Julian._(value + day);
+  Julian addDays(double day) => Julian(value + day);
 
   /// Adds hours.
-  Julian addHours(double hours) => Julian._(value + hours / _hoursPerDay);
+  Julian addHours(double hours) => Julian(value + hours / _hoursPerDay);
 
   /// Adds minutes.
-  Julian addMinutes(double min) => Julian._(value + min / _minutesPerDay);
+  Julian addMinutes(double min) => Julian(value + min / _minutesPerDay);
 
   /// Adds seconds.
-  Julian addSeconds(double sec) => Julian._(value + _secondsPerDay);
+  Julian addSeconds(double sec) => Julian(value + _secondsPerDay);
 
   /// Calculate Greenwich Mean Sidereal Time for the Julian date.
   ///

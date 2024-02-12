@@ -3,7 +3,7 @@ import 'package:latlng/latlng.dart';
 
 final date = DateTime.utc(2024, 2, 9, 15, 4, 11);
 
-var observer = LatLngAlt(
+final observer = LatLngAlt(
   Angle.degree(36.9613422),
   Angle.degree(-122.0308),
   0.370,

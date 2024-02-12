@@ -1,3 +1,7 @@
+## [2.0.5]
+
+* Julian constructor is public.
+
 ## [2.0.4]
 
 * Fix GMST, ECF and Topcentric calculations.
