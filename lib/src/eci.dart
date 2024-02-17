@@ -15,6 +15,14 @@ class EarthCenteredInertial {
   /// Z Coordinate.
   final double z;
 
+  EarthCenteredInertial operator +(EarthCenteredInertial other) {
+    return EarthCenteredInertial(x + other.x, y + other.y, z + other.z);
+  }
+
+  EarthCenteredInertial operator -(EarthCenteredInertial other) {
+    return EarthCenteredInertial(x - other.x, y - other.y, z - other.z);
+  }
+
   /// Converts this ECI object to ECF.
   EarthCenteredEarthFixed toEcf(Angle gmst) {
     final s = sin(gmst.radians);

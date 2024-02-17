@@ -14,19 +14,32 @@ class EarthCenteredEarthFixed {
   /// Z Coordinate.
   final double z;
 
-  EarthCenteredEarthFixed operator +(EarthCenteredEarthFixed other) {
-    final dx = x + other.x;
-    final dy = x + other.y;
-    final dz = x + other.z;
+  /// Convert this ECF to ECI.
+  EarthCenteredInertial toEci(Angle gmst) {
+    // ccar.colorado.edu/ASEN5070/handouts/coordsys.doc
+    //
+    // [X]     [C -S  0][X]
+    // [Y]  =  [S  C  0][Y]
+    // [Z]eci  [0  0  1][Z]ecf
+    //
+    var dx = x * cos(gmst.radians) - y * sin(gmst.radians);
+    var dy = x * sin(gmst.radians) + y * cos(gmst.radians);
+    var dz = z;
 
-    return EarthCenteredEarthFixed(dx, dy, dz);
+    return EarthCenteredInertial(dx, dy, dz);
   }
 
-  EarthCenteredEarthFixed operator -(EarthCenteredEarthFixed other) {
-    final dx = x - other.x;
-    final dy = x - other.y;
-    final dz = x - other.z;
+  /// Convert this ECF to ECI.
+  EarthCenteredInertial toEciByDateTime(DateTime utc) =>
+      toEci(utc.toUtc().gsmt);
 
-    return EarthCenteredEarthFixed(dx, dy, dz);
+  /// Sum of two ECFs.
+  EarthCenteredEarthFixed operator +(EarthCenteredEarthFixed other) {
+    return EarthCenteredEarthFixed(x + other.x, y + other.y, z + other.z);
+  }
+
+  /// Sub of two ECFs.
+  EarthCenteredEarthFixed operator -(EarthCenteredEarthFixed other) {
+    return EarthCenteredEarthFixed(x - other.x, y - other.y, z - other.z);
   }
 }
