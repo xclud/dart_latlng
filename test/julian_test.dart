@@ -18,5 +18,9 @@ void main() {
     test('Greenwich Mean Sidereal Time', () {
       expect(julian.gmst.radians, 0.09176249618717236);
     });
+
+    test('To DateTime', () {
+      expect(julian.toDateTime(), DateTime.utc(2024, 2, 9, 15, 4, 11, 0, 6));
+    });
   });
 }

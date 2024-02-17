@@ -28,7 +28,20 @@ class Julian {
   /// represented by the day value of 1.5, etc.
 
   const Julian(this.value);
-  // Jan  1.5 2000 = Jan  1 2000 12h UTC
+
+  /// Creates a Julian date from [year] and day-of-year.
+  factory Julian.fromYearDoy(int year, double doy) {
+    year--;
+
+    // Centuries are not leap years unless they divide by 400
+    int A = year ~/ 100;
+    int B = 2 - A + (A ~/ 4);
+
+    double jan01 =
+        (365.25 * year).toInt() + (30.6001 * 14).toInt() + 1720994.5 + B;
+
+    return Julian(jan01 + doy);
+  }
 
   /// Create a Julian date object from a DateTime object. The time
   /// contained in the DateTime object is assumed to be UTC.
@@ -64,19 +77,19 @@ class Julian {
   /// Dec 31.5 1899 = Dec 31 1899 12h UTC
   double fromJan0_12h_1900() => value - _j0H12Y1900;
 
-  /// Jan 1.0 1900 = Jan  1 1900 00h UTC
+  /// Jan 1.0 1900 = Jan 1 1900 00h UTC
   double fromJan1_00h_1900() => value - _j1H00Y1900;
 
-  /// Jan 1.5 1900 = Jan  1 1900 12h UTC
+  /// Jan 1.5 1900 = Jan 1 1900 12h UTC
   double fromJan1_12h_1900() => value - _j1H12Y1900;
 
-  /// Jan 1.5 2000 = Jan  1 2000 12h UTC
+  /// Jan 1.5 2000 = Jan 1 2000 12h UTC
   double fromJan1_12h_2000() => value - _j1H12Y2000;
 
   /// Dec 31.5 1899 = Dec 31 1899 12h UTC
   static const _j0H12Y1900 = 2415020.0;
 
-  /// Jan 1.0 1900 = Jan  1 1900 00h UTC
+  /// Jan 1.0 1900 = Jan 1 1900 00h UTC
   static const _j1H00Y1900 = 2415020.5;
 
   /// Jan 1.5 1900 = Jan  1 1900 12h UTC
@@ -96,6 +109,35 @@ class Julian {
 
   /// Adds seconds.
   Julian addSeconds(double sec) => Julian(value + _secondsPerDay);
+
+  /// Converts from [Julian] to [DateTime].
+  DateTime toDateTime() {
+    final j = value;
+    final double d2 = j + 0.5;
+    final int Z = d2.toInt();
+    final int alpha = (Z - 1867216.25) ~/ 36524.25;
+    final int A = Z + 1 + alpha - (alpha ~/ 4);
+    final int B = A + 1524;
+    final int C = ((B - 122.1) ~/ 365.25);
+    final int D = (365.25 * C).toInt();
+    final int E = ((B - D) ~/ 30.6001);
+
+    // For reference: the fractional day of the month can be
+    // calculated as follows:
+    //
+    // double day = B - D - (int)(30.6001 * E) + F;
+
+    final month = (E <= 13) ? (E - 1) : (E - 13);
+    final year = (month >= 3) ? (C - 4716) : (C - 4715);
+
+    final jdJan01 = Julian.fromYearDoy(year, 1.0);
+    final doy = j - jdJan01.value; // zero-relative
+
+    final dtJan01 = DateTime.utc(year, 1, 1, 0, 0, 0);
+
+    return dtJan01
+        .add(Duration(microseconds: (doy * 24.0 * 3600 * 1000 * 1000).toInt()));
+  }
 
   /// Calculate Greenwich Mean Sidereal Time for the Julian date.
   ///
