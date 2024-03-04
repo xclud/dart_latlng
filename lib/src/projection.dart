@@ -64,7 +64,9 @@ extension ProjectionExtensions on Projection {
 /// its unique property of representing any course of constant bearing
 /// as a straight segment.
 class EPSG4326 extends Projection {
-  const EPSG4326();
+  const EPSG4326({this.precision = 14});
+
+  final int precision;
 
   static const EPSG4326 instance = EPSG4326();
 
@@ -89,9 +91,16 @@ class EPSG4326 extends Projection {
     final xx = x - 0.5;
     final yy = 0.5 - y;
 
-    final lat = 90.0 - 360.0 * atan(exp(-yy * 2.0 * pi)) / pi;
-    final lng = 360.0 * xx;
+    final lat = _round(90.0 - 360.0 * atan(exp(-yy * 2.0 * pi)) / pi, precision);
+    final lng = _round(360.0 * xx, precision);
 
     return LatLng(Angle.degree(lat), Angle.degree(lng));
   }
+}
+
+double _round(double value, int precision) {
+  final j = pow(10, precision);
+  value *= j;
+  value = value.toInt() as double;
+  return value / j;
 }
